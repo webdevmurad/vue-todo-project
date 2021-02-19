@@ -1,12 +1,14 @@
 <template>
     <div class="todo-block__box">
         <div class="todo-block">
-            <div class="todo-block__head">
-                <textarea class="todo-block__textarea"></textarea>
-                <button class="todo-block__button">
-                    <img class="todo-button__img" src="../assets/plus.svg">
-                </button>
-            </div>
+            <form @submit.prevent="createTask">
+                <div class="todo-block__head">
+                    <textarea class="todo-block__textarea" v-model="text"></textarea>
+                    <button type="submit" class="todo-block__button">
+                        <img class="todo-button__img" src="../assets/plus.svg">
+                    </button>
+                </div>
+            </form>
             <TodoNode/>
         </div>
     </div>
@@ -14,20 +16,34 @@
 
 <script lang="ts">
 import TodoNode from './TodoNode.vue';
-import { Component,Vue } from "vue-property-decorator";
+import { defineComponent, ref } from "vue";
+import { useStore } from "@/store";
+import { TodoItem } from '@/store/state';
+import { MutationType } from '@/store/mutations';
 
-
-@Component({
+export default defineComponent ({
     components: {
         TodoNode,
     },
+    setup() {
+        const text = ref('')
+        const store = useStore()
+        console.log(text)
+        const createTask = () => {
+            if (text.value === '') return
+
+            const item: TodoItem = {
+                id: Date.now(),
+                text: text.value,
+                completed: false
+            }
+
+            store.commit(MutationType.CreateItem, item)
+            text.value = ''
+        }
+        return {createTask, text}
+    }
 })
-
-
-export default class TodoInputBlock extends Vue {
-
-
-}
 </script>
 
 <style scoped>

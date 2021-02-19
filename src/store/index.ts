@@ -1,12 +1,9 @@
 import Vuex, { CommitOptions, DispatchOptions, createLogger, Store as VuexStore, } from 'vuex'
-import Vue from "vue";
 
 import { State, state } from './state'
 import { Mutations, mutations } from './mutations'
 import { Actions, actions } from './action'
 import { Getters, getters } from './getters'
-
-Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     plugins: process.env.NODE_ENV === 'development' ? [createLogger()] : [],
