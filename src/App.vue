@@ -6,18 +6,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { defineComponent } from 'vue'
 import Header from './components/Header.vue';
 import TodoInputBlock from './components/TodoInputBlock.vue';
 
-
-@Component({
-  components: {
-      Header,
-      TodoInputBlock,
-  },
+export default defineComponent ({
+    components: { Header, TodoInputBlock },
 })
-export default class App extends Vue {}
 </script>
 
 <style>
