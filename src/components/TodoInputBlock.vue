@@ -1,5 +1,8 @@
 <template>
     <div class="todo-block__box">
+        <div class="todo-block__header">
+            <p>{{ completedCount }} из {{ totalCount }} выполнены.</p>
+        </div>
         <div class="todo-block">
             <form @submit.prevent="createTask">
                 <div class="todo-block__head">
@@ -16,10 +19,11 @@
 
 <script lang="ts">
 import TodoNode from './TodoNode.vue';
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useStore } from "@/store";
 import { TodoItem } from '@/store/state';
 import { MutationType } from '@/store/mutations';
+import { ActionTypes } from '../store/action'
 
 export default defineComponent ({
     components: {
@@ -28,7 +32,6 @@ export default defineComponent ({
     setup() {
         const text = ref('')
         const store = useStore()
-        console.log(text)
         const createTask = () => {
             if (text.value === '') return
 
@@ -41,7 +44,10 @@ export default defineComponent ({
             store.commit(MutationType.CreateItem, item)
             text.value = ''
         }
-        return {createTask, text}
+        onMounted(() => store.dispatch(ActionTypes.GetTodoItems))
+        const completedCount = computed(() => store.getters.completedCount)
+        const totalCount = computed(() => store.getters.totalCount)
+        return {createTask, text, completedCount, totalCount}
     }
 })
 </script>
@@ -51,9 +57,13 @@ export default defineComponent ({
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         width: 100%;
         height: 100%;
         margin-top: 100px;
+    }
+    .todo-block__header p {
+        margin-bottom: 10px;
     }
     .todo-block {
         width: 500px;
@@ -100,5 +110,10 @@ export default defineComponent ({
     .todo-button__img {
         width: 20px;
         height: 20px;
+    }
+    @media (max-width: 530px) {
+        .todo-block {
+            width: 95%;
+        }
     }
 </style>

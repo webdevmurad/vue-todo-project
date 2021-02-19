@@ -22,6 +22,6 @@ export default defineComponent ({
         box-sizing: border-box;
     }
     body {
-        font-family: Poppins;
+        font-family: Roboto, sans-serif;
     }
 </style>
